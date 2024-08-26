@@ -22,7 +22,8 @@ win_rate = st.sidebar.slider("Percentuale di Vincita (%)", min_value=0, max_valu
 adjusted_win_rate = win_rate * (1 - zero_trade_rate)
 loss_rate = 1 - adjusted_win_rate - zero_trade_rate
 
-num_variations = st.sidebar.number_input("Numero di Variazioni", min_value=1, max_value=20, value=10)
+# Modifica del numero massimo di variazioni a 50
+num_variations = st.sidebar.number_input("Numero di Variazioni", min_value=1, max_value=50, value=10)
 
 # Simulazione
 simulation_results = {}
@@ -55,23 +56,27 @@ df_ticks = pd.DataFrame(ticks_used)
 # Unione dei due DataFrame per avere colonne alternate di profitti e tick
 df_combined = pd.concat([df_simulation, df_ticks], axis=1).sort_index(axis=1, key=lambda x: [int(i.split()[-1]) for i in x])
 
-# Calcolo della media dei profitti cumulativi
-average_cumulative_profit = df_simulation.iloc[-1].mean()
-
-# Calcolo del drawdown massimo
-drawdown = df_simulation.cummax() - df_simulation
-max_drawdown = drawdown.max().max()
-
-# Calcolo del Sharpe ratio (approssimativo)
-sharpe_ratio = (df_simulation.mean().mean() / df_simulation.std().mean()) * np.sqrt(252)
+# Selezione delle variazioni da visualizzare
+st.sidebar.subheader("Seleziona le Variazioni da Visualizzare")
+selected_variations = st.sidebar.multiselect("Variazioni", df_simulation.columns.tolist(), default=df_simulation.columns.tolist())
 
 # Visualizzazione dei risultati
 st.subheader("Risultati della Simulazione")
-st.line_chart(df_simulation, use_container_width=True)
+st.line_chart(df_simulation[selected_variations], use_container_width=True)
 
 # Visualizzazione della tabella dei profitti cumulativi e dei tick
 st.subheader("Tabella dei Profitti Cumulativi e Tick Utilizzati")
 st.dataframe(df_combined)
+
+# Calcolo della media dei profitti cumulativi
+average_cumulative_profit = df_simulation[selected_variations].iloc[-1].mean()
+
+# Calcolo del drawdown massimo
+drawdown = df_simulation[selected_variations].cummax() - df_simulation[selected_variations]
+max_drawdown = drawdown.max().max()
+
+# Calcolo del Sharpe ratio (approssimativo)
+sharpe_ratio = (df_simulation[selected_variations].mean().mean() / df_simulation[selected_variations].std().mean()) * np.sqrt(252)
 
 # Visualizzazione della media dei profitti cumulativi
 st.subheader(f"Media dei Profitti Cumulativi: ${average_cumulative_profit:.2f}")
