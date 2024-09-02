@@ -6,6 +6,9 @@ import io
 
 # Page configuration
 st.title("Contract-Based Trading Simulator")
+st.markdown("""
+Hi I'm Noti Trader and this is my trading simulator
+""")
 
 # Simulation Calculations
 contracts = st.sidebar.selectbox("Number of Contracts", [1, 2, 3, 4])
