@@ -9,9 +9,9 @@ st.title("Contract-Based Trading Simulator")
 
 # Simulation Calculations
 contracts = st.sidebar.selectbox("Number of Contracts", [1, 2, 3, 4])
-min_ticks_profit = st.sidebar.number_input("Minimum Profit Ticks", min_value=1, max_value=10, value=3)
-max_ticks_profit = st.sidebar.number_input("Maximum Profit Ticks", min_value=1, max_value=10, value=7)
-ticks_loss = st.sidebar.number_input("Loss Ticks", min_value=1, max_value=10, value=5)
+min_ticks_profit = st.sidebar.number_input("Minimum Profit Ticks", min_value=1, max_value=310, value=3)
+max_ticks_profit = st.sidebar.number_input("Maximum Profit Ticks", min_value=1, max_value=310, value=7)
+ticks_loss = st.sidebar.number_input("Loss Ticks", min_value=1, max_value=210, value=5)
 tick_value = st.sidebar.number_input("Tick Value ($)", min_value=0.01, value=12.5, step=0.01)
 fee_per_contract = st.sidebar.number_input("Fee per Contract ($)", min_value=0.01, value=2.5, step=0.01)
 num_trades = st.sidebar.number_input("Number of Trades", min_value=1, max_value=1000, value=200)
