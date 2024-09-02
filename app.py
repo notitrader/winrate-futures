@@ -10,7 +10,15 @@ st.title("Contract-Based Trading Simulator")
 st.markdown("""
 Hi I'm Noti Trader and this is my trading simulator
 """)
-
+# Add the clickable image to the sidebar
+st.sidebar.markdown(
+    """
+    <a href="https://notitrader.com/" target="_blank">
+        <img src="https://notitrader.com/wp-content/uploads/2024/09/logo-noti-png.png" alt="Noti Trader Logo" style="width: 150px; margin-bottom: 20px;">
+    </a>
+    """,
+    unsafe_allow_html=True
+)
 # Simulation Calculations
 contracts = st.sidebar.selectbox("Number of Contracts", [1, 2, 3, 4])
 min_ticks_profit = st.sidebar.number_input("Minimum Profit Ticks", min_value=1, max_value=300, value=3)
