@@ -120,3 +120,16 @@ else:
     b.write(csv.encode())
     b.seek(0)
     st.download_button(label="Download as CSV", data=b, file_name="simulation_results.csv", mime="text/csv")
+    # Desc
+st.markdown("""
+**Discover the ultimate Trading Simulator designed for Contract-Based Trading and Futures Trading enthusiasts.**  
+This powerful tool allows traders to simulate and analyze their strategies, focusing on **Risk Management** and **Profit/Loss Simulation**.  
+By configuring key parameters such as Stop Loss settings, Tick Value, and Win Rate, users can **Backtest Trading Strategies** and assess their **Trading Performance** in a realistic environment.
+
+Our **Risk Management Simulator** enables you to simulate up to 1000 trades with customizable Futures Contracts and provides detailed insights through **Cumulative Profit Analysis**.  
+Whether you're looking to improve your Win Rate or understand the impact of Trading Fees, this Trade Simulation Tool offers a comprehensive solution for traders at all levels.
+
+With features like **Advanced Trading Analytics**, detailed **Profit/Loss Distribution** charts, and the ability to **Download Trading Simulations**, you can optimize your trading strategy with confidence.  
+Perfect for both beginners and seasoned professionals, this app provides everything you need to take your trading performance to the next level.
+""")
+
