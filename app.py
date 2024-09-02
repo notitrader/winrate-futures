@@ -5,24 +5,6 @@ import matplotlib.pyplot as plt
 import io
 import streamlit.components.v1 as components
 
-# Creare un componente HTML per Google Analytics
-GA_TRACKING_ID = 'G-57S9M5V2N6'
-ga_code = f"""
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={GA_TRACKING_ID}"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
-  gtag('js', new Date());
-
-  gtag('config', '{GA_TRACKING_ID}');
-</script>
-"""
-
-# Iniettare il codice nel componente Streamlit
-components.html(ga_code)
-
-
 # Page configuration
 st.title("Contract-Based Trading Simulator")
 st.markdown("""
@@ -158,6 +140,24 @@ Perfect for both beginners and seasoned professionals, this app provides everyth
 Discover my Trading Journal created with Notion: [https://notitrader.com/](https://notitrader.com/)
 
 """)
+
+
+# Creare un componente HTML per Google Analytics
+GA_TRACKING_ID = 'G-57S9M5V2N6'
+ga_code = f"""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_TRACKING_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+
+  gtag('config', '{GA_TRACKING_ID}');
+</script>
+"""
+
+# Iniettare il codice nel componente Streamlit
+components.html(ga_code)
 
 
 
