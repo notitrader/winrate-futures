@@ -56,36 +56,47 @@ df_ticks = pd.DataFrame(ticks_used)
 # Combining the two DataFrames to have alternating columns of profits and ticks
 df_combined = pd.concat([df_simulation, df_ticks], axis=1).sort_index(axis=1, key=lambda x: [int(i.split()[-1]) for i in x])
 
-# Selecting one variation to display
+# Selecting one variation to display or all
 st.sidebar.subheader("Select Variation to Display")
-selected_variation = st.sidebar.selectbox("Variation", df_simulation.columns.tolist())
+options = ["Tutte le variazioni"] + df_simulation.columns.tolist()
+selected_variation = st.sidebar.selectbox("Variation", options)
 
-# Calculating the average cumulative profit
-average_cumulative_profit = df_simulation[selected_variation].iloc[-1].mean()
-
-# Calculating the maximum drawdown
-drawdown = df_simulation[selected_variation].cummax() - df_simulation[selected_variation]
-max_drawdown = drawdown.max().max()
-
-# Calculating the Sharpe ratio (approximate)
-sharpe_ratio = (df_simulation[selected_variation].mean() / df_simulation[selected_variation].std()) * np.sqrt(252)
+# Calculating metrics
+if selected_variation == "Tutte le variazioni":
+    selected_variations = df_simulation.columns.tolist()
+    avg_profit = df_simulation[selected_variations].iloc[-1].mean()
+    drawdown = df_simulation[selected_variations].cummax() - df_simulation[selected_variations]
+    max_drawdown = drawdown.max().max()
+    sharpe_ratio = (df_simulation[selected_variations].mean().mean() / df_simulation[selected_variations].std().mean()) * np.sqrt(252)
+else:
+    selected_variations = [selected_variation]
+    avg_profit = df_simulation[selected_variation].iloc[-1].mean()
+    drawdown = df_simulation[selected_variation].cummax() - df_simulation[selected_variation]
+    max_drawdown = drawdown.max().max()
+    sharpe_ratio = (df_simulation[selected_variation].mean() / df_simulation[selected_variation].std()) * np.sqrt(252)
 
 # Display the calculated values as paragraphs
-st.markdown(f"<p>Average Cumulative Profits: ${average_cumulative_profit:.2f}</p>", unsafe_allow_html=True)
+st.markdown(f"<p>Average Cumulative Profits: ${avg_profit:.2f}</p>", unsafe_allow_html=True)
 st.markdown(f"<p>Maximum Drawdown: ${max_drawdown:.2f}</p>", unsafe_allow_html=True)
 st.markdown(f"<p>Sharpe Ratio: {sharpe_ratio:.2f}</p>", unsafe_allow_html=True)
 
 # Displaying results
 st.subheader("Simulation Results")
-st.line_chart(df_simulation[selected_variation], use_container_width=True)
+st.line_chart(df_simulation[selected_variations], use_container_width=True)
 
 # Displaying the table of cumulative profits and used ticks
 st.subheader("Table of Cumulative Profits and Used Ticks")
-st.dataframe(df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']])
+if selected_variation == "Tutte le variazioni":
+    st.dataframe(df_combined)
+else:
+    st.dataframe(df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']])
 
 # Download results as CSV
 st.subheader("Download Results")
-csv = df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']].to_csv(index=False)
+if selected_variation == "Tutte le variazioni":
+    csv = df_combined.to_csv(index=False)
+else:
+    csv = df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']].to_csv(index=False)
 b = io.BytesIO()
 b.write(csv.encode())
 b.seek(0)
