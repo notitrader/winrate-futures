@@ -22,18 +22,6 @@ ga_code = f"""
 # Iniettare il codice nel componente Streamlit
 components.html(ga_code)
 
-# Cookie consent notification
-if 'accepted_cookies' not in st.session_state:
-    st.session_state['accepted_cookies'] = False
-
-if not st.session_state['accepted_cookies']:
-    st.warning("""
-    This app uses cookies to enhance your experience. By continuing to use this app, you consent to our use of cookies.
-    """)
-    if st.button("I Accept"):
-        st.session_state['accepted_cookies'] = True
-
-
 
 # Page configuration
 st.title("Contract-Based Trading Simulator")
