@@ -64,9 +64,52 @@ num_variations = st.sidebar.number_input("Number of Variations", min_value=1, ma
 # Simulation
 simulation_results, ticks_used = simulate_trades(contracts, min_ticks_profit, max_ticks_profit, ticks_loss, tick_value, fee_per_contract, num_trades, zero_trade_rate, adjusted_win_rate, num_variations)
 
+# Debugging output
+st.write("Simulation Results", simulation_results)
+st.write("Ticks Used", ticks_used)
+
 # Creating DataFrame to display results
 df_simulation = pd.DataFrame(simulation_results)
 df_ticks = pd.DataFrame(ticks_used)
 
-# Combining the two DataFrames to have alternating columns of profits and ticks
-df_combined
+st.write("DataFrame Simulation", df_simulation)
+st.write("DataFrame Ticks", df_ticks)
+
+# Check for empty DataFrames
+if df_simulation.empty or df_ticks.empty:
+    st.error("Error: One or both of the DataFrames are empty. Check the simulation results and ticks used.")
+else:
+    # Combining the two DataFrames to have alternating columns of profits and ticks
+    df_combined = pd.concat([df_simulation, df_ticks], axis=1).sort_index(axis=1, key=lambda x: [int(i.split()[-1]) for i in x])
+
+    # Selecting variations to display
+    st.sidebar.subheader("Select Variations to Display")
+    selected_variations = st.sidebar.multiselect("Variations", df_simulation.columns.tolist(), default=df_simulation.columns.tolist())
+
+    # Displaying results
+    st.subheader("Simulation Results")
+    st.line_chart(df_simulation[selected_variations], use_container_width=True)
+
+    # Displaying the table of cumulative profits and used ticks
+    st.subheader("Table of Cumulative Profits and Used Ticks")
+    st.dataframe(df_combined)
+
+    # Calculating metrics
+    average_cumulative_profit, max_drawdown, sharpe_ratio = calculate_metrics(df_simulation, selected_variations)
+
+    # Displaying the average cumulative profit
+    st.subheader(f"Average Cumulative Profits: ${average_cumulative_profit:.2f}")
+
+    # Displaying the maximum drawdown
+    st.subheader(f"Maximum Drawdown: ${max_drawdown:.2f}")
+
+    # Displaying the Sharpe Ratio
+    st.subheader(f"Sharpe Ratio: {sharpe_ratio:.2f}")
+
+    # Download results as CSV
+    st.subheader("Download Results")
+    csv = df_combined.to_csv(index=False)
+    b = io.BytesIO()
+    b.write(csv.encode())
+    b.seek(0)
+    st.download_button(label="Download as CSV", data=b, file_name="simulation_results.csv", mime="text/csv")
