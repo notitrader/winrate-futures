@@ -9,9 +9,9 @@ st.title("Contract-Based Trading Simulator")
 
 # Simulation Calculations
 contracts = st.sidebar.selectbox("Number of Contracts", [1, 2, 3, 4])
-min_ticks_profit = st.sidebar.number_input("Minimum Profit Ticks", min_value=1, max_value=300, value=3)
-max_ticks_profit = st.sidebar.number_input("Maximum Profit Ticks", min_value=1, max_value=300, value=7)
-ticks_loss = st.sidebar.number_input("Loss Ticks", min_value=1, max_value=20, value=5)
+min_ticks_profit = st.sidebar.number_input("Minimum Profit Ticks", min_value=1, max_value=820, value=3)
+max_ticks_profit = st.sidebar.number_input("Maximum Profit Ticks", min_value=1, max_value=820, value=7)
+ticks_loss = st.sidebar.number_input("Loss Ticks", min_value=1, max_value=820, value=5)
 tick_value = st.sidebar.number_input("Tick Value ($)", min_value=0.01, value=12.5, step=0.01)
 fee_per_contract = st.sidebar.number_input("Fee per Contract ($)", min_value=0.01, value=2.5, step=0.01)
 num_trades = st.sidebar.number_input("Number of Trades", min_value=1, max_value=2000, value=200)
@@ -23,7 +23,7 @@ adjusted_win_rate = win_rate * (1 - breakeven_trades)
 loss_rate = 1 - adjusted_win_rate - breakeven_trades
 
 # Modify the maximum number of variations
-num_variations = st.sidebar.number_input("Number of Variations", min_value=1, max_value=50, value=10)
+num_variations = st.sidebar.number_input("Number of Variations", min_value=1, max_value=350, value=10)
 
 # Simulation
 simulation_results = {}
