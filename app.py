@@ -53,8 +53,12 @@ for variation in range(1, num_variations + 1):
 df_simulation = pd.DataFrame(simulation_results)
 df_ticks = pd.DataFrame(ticks_used)
 
-# Replace NaN or inf with 0 for display purposes
+# Replace NaN, inf, and -inf with 0 for display purposes
 df_simulation.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
+df_ticks.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
+
+# Convert ticks to string to prevent display issues
+df_ticks = df_ticks.applymap(str)
 
 # Combine profits and ticks into a single DataFrame with a MultiIndex
 combined_data = {}
