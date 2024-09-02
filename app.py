@@ -3,6 +3,24 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
+import streamlit.components.v1 as components
+
+# Creare un componente HTML per Google Analytics
+GA_TRACKING_ID = 'G-57S9M5V2N6'
+ga_code = f"""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_TRACKING_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+
+  gtag('config', '{GA_TRACKING_ID}');
+</script>
+"""
+
+# Iniettare il codice nel componente Streamlit
+components.html(ga_code)
 
 # Cookie consent notification
 if 'accepted_cookies' not in st.session_state:
