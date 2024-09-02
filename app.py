@@ -47,14 +47,22 @@ for variation in range(1, num_variations + 1):
         profits.append(profit)
     cumulative_profit = np.cumsum(profits)
     simulation_results[f'Variation {variation}'] = cumulative_profit
-    ticks_used[f'Ticks {variation}'] = ticks
+    ticks_used[f'Variation {variation}'] = ticks
 
 # Creating DataFrame to display results
 df_simulation = pd.DataFrame(simulation_results)
 df_ticks = pd.DataFrame(ticks_used)
 
-# Combining the two DataFrames to have alternating columns of profits and ticks
-df_combined = pd.concat([df_simulation, df_ticks], axis=1).sort_index(axis=1, key=lambda x: [int(i.split()[-1]) for i in x])
+# Combine profits and ticks into a single DataFrame with a MultiIndex
+combined_data = {}
+for variation in range(1, num_variations + 1):
+    combined_data[(f'Variation {variation}', 'Profits')] = df_simulation[f'Variation {variation}']
+    combined_data[(f'Variation {variation}', 'Ticks')] = df_ticks[f'Variation {variation}']
+
+df_combined = pd.DataFrame(combined_data)
+
+# Set MultiIndex for columns
+df_combined.columns = pd.MultiIndex.from_tuples(df_combined.columns, names=["Variation", "Type"])
 
 # Selecting one variation to display or all
 st.sidebar.subheader("Select Variation to Display")
@@ -89,14 +97,14 @@ st.subheader("Table of Cumulative Profits and Used Ticks")
 if selected_variation == "Tutte le variazioni":
     st.dataframe(df_combined)
 else:
-    st.dataframe(df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']])
+    st.dataframe(df_combined[[selected_variation]])
 
 # Download results as CSV
 st.subheader("Download Results")
 if selected_variation == "Tutte le variazioni":
     csv = df_combined.to_csv(index=False)
 else:
-    csv = df_combined[[selected_variation, f'Ticks {selected_variation.split()[-1]}']].to_csv(index=False)
+    csv = df_combined[[selected_variation]].to_csv(index=False)
 b = io.BytesIO()
 b.write(csv.encode())
 b.seek(0)
